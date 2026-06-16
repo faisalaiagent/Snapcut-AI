@@ -1,22 +1,18 @@
 "use client";
 
 import Link from "next/link";
-import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { Menu, X, Scissors } from "lucide-react";
-import { cn } from "@/utils/cn";
 
 const NAV_LINKS = [
-  { href: "/#tools",   label: "Tools" },
-  { href: "/pricing",  label: "Pricing" },
-  { href: "/about",    label: "About" },
-  { href: "/contact",  label: "Contact" },
+  { href: "/#tools",  label: "Tools" },
+  { href: "/pricing", label: "Pricing" },
+  { href: "/about",   label: "About" },
+  { href: "/contact", label: "Contact" },
 ];
 
 export function Navbar() {
-  const { data: session, status } = useSession();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const isLoading = status === "loading";
 
   return (
     <header className="sticky top-0 z-50 bg-[rgba(250,249,247,0.92)] backdrop-blur-md border-b border-surface-3">
@@ -45,36 +41,6 @@ export function Navbar() {
           ))}
         </div>
 
-        {/* Desktop CTA */}
-        <div className="hidden md:flex items-center gap-2">
-          {isLoading ? (
-            /* Skeleton while session loads */
-            <div className="w-24 h-8 bg-surface-2 rounded-lg animate-pulse" />
-          ) : session ? (
-            <Link
-              href="/dashboard"
-              className="btn-primary text-sm px-4 py-2 rounded-lg"
-            >
-              Dashboard
-            </Link>
-          ) : (
-            <>
-              <Link
-                href="/login"
-                className="text-sm text-ink-3 px-3 py-2 rounded-lg hover:bg-surface-2 hover:text-ink transition-all no-underline"
-              >
-                Sign in
-              </Link>
-              <Link
-                href="/register"
-                className="btn-primary text-sm px-4 py-2 rounded-lg"
-              >
-                Get started free
-              </Link>
-            </>
-          )}
-        </div>
-
         {/* Mobile hamburger */}
         <button
           className="md:hidden p-2 rounded-lg hover:bg-surface-2 transition-all"
@@ -88,7 +54,7 @@ export function Navbar() {
         </button>
       </nav>
 
-      {/* Mobile menu */}
+      {/* Mobile menu — no auth buttons */}
       {mobileOpen && (
         <div className="md:hidden border-t border-surface-3 bg-[rgba(250,249,247,0.98)] px-4 py-4 flex flex-col gap-1">
           {NAV_LINKS.map((link) => (
@@ -101,35 +67,6 @@ export function Navbar() {
               {link.label}
             </Link>
           ))}
-
-          <div className="pt-3 border-t border-surface-3 mt-2 flex flex-col gap-2">
-            {session ? (
-              <Link
-                href="/dashboard"
-                className="btn-primary justify-center"
-                onClick={() => setMobileOpen(false)}
-              >
-                Dashboard
-              </Link>
-            ) : (
-              <>
-                <Link
-                  href="/login"
-                  className="btn-secondary justify-center"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  Sign in
-                </Link>
-                <Link
-                  href="/register"
-                  className="btn-primary justify-center"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  Get started free
-                </Link>
-              </>
-            )}
-          </div>
         </div>
       )}
     </header>
